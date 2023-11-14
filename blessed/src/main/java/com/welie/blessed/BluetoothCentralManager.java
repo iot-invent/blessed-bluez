@@ -518,6 +518,8 @@ public class BluetoothCentralManager {
 				scanResult.stamp();
 				bluetoothCentralManagerCallback.onDiscoveredPeripheral(peripheral, scanResult);
 			});
+		}else {
+			logger.warn("Ignore scan results normalScanActive={}, isScanning={}, isStoppingScan={})",normalScanActive,isScanning,isStoppingScan);
 		}
 	}
 
@@ -762,16 +764,14 @@ public class BluetoothCentralManager {
 				callBackHandler.post(bluetoothCentralManagerCallback::onScanStarted);
 				startScanTimer();
 			} catch (final BluezFailedException e) {
-				logger.error("Could not start discovery (failed)");
-				logger.error(e.getMessage());
+				logger.error("Could not start discovery (failed)",e);
 				callBackHandler.post(()->bluetoothCentralManagerCallback.onScanFailed(e));
 			} catch (final BluezNotReadyException e) {
-				logger.error("Could not start discovery (not ready)");
-				logger.error(e.getMessage());
+				logger.error("Could not start discovery (not ready)",e);
 				callBackHandler.post(()->bluetoothCentralManagerCallback.onScanFailed(e));
-			} catch (final DBusExecutionException e) {
+			} catch (final Exception e) {
 				// Still need to see what this could be
-				logger.error("Error starting scanner");
+				logger.error("Error starting scanner",e);
 				logger.error(e.getMessage());
 				callBackHandler.post(()->bluetoothCentralManagerCallback.onScanFailed(e));
 			}
@@ -824,6 +824,9 @@ public class BluetoothCentralManager {
 				} else if (e.getMessage().equalsIgnoreCase("Operation already in progress")) {
 					logger.error("a stopDiscovery is in progress");
 				}
+			} catch (final Exception e) {
+				// Still need to see what this could be
+				logger.error("Error stop scanner",e);
 			}
 			completedCommand();
 		});
