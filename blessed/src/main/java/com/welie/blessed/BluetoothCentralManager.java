@@ -762,7 +762,6 @@ public class BluetoothCentralManager {
 				isScanning = true;
 				logger.debug("scan started");
 				callBackHandler.post(bluetoothCentralManagerCallback::onScanStarted);
-				startScanTimer();
 			} catch (final BluezFailedException e) {
 				logger.error("Could not start discovery (failed)",e);
 				callBackHandler.post(()->bluetoothCentralManagerCallback.onScanFailed(e));
@@ -774,6 +773,8 @@ public class BluetoothCentralManager {
 				logger.error("Error starting scanner",e);
 				logger.error(e.getMessage());
 				callBackHandler.post(()->bluetoothCentralManagerCallback.onScanFailed(e));
+			}finally {
+				startScanTimer();
 			}
 			completedCommand();
 		});
