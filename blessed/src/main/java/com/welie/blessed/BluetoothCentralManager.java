@@ -768,10 +768,15 @@ public class BluetoothCentralManager {
 			} catch (final BluezNotReadyException e) {
 				logger.error("Could not start discovery (not ready)",e);
 				callBackHandler.post(()->bluetoothCentralManagerCallback.onScanFailed(e));
+			} catch (final DBusExecutionException e) {
+				logger.error("Error starting scanner",e);
+				callBackHandler.post(()->bluetoothCentralManagerCallback.onScanFailed(e));
+				if (e.getMessage().equalsIgnoreCase("Operation already in progress")) {
+					isScanning = true;
+				}
 			} catch (final Exception e) {
 				// Still need to see what this could be
 				logger.error("Error starting scanner",e);
-				logger.error(e.getMessage());
 				callBackHandler.post(()->bluetoothCentralManagerCallback.onScanFailed(e));
 			}finally {
 				startScanTimer();
@@ -828,6 +833,8 @@ public class BluetoothCentralManager {
 			} catch (final Exception e) {
 				// Still need to see what this could be
 				logger.error("Error stop scanner",e);
+			}finally {
+				isStoppingScan = false;
 			}
 			completedCommand();
 		});
