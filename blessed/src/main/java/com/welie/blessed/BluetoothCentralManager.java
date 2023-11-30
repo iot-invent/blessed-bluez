@@ -504,23 +504,19 @@ public class BluetoothCentralManager {
 			return;
 		}
 
-		if (normalScanActive && isScanning && !isStoppingScan) {
-			// Implement SCANOPTION_NO_NULL_NAMES
-			if (scanOptions.contains(SCANOPTION_NO_NULL_NAMES) && scanResult.getName() == null) {
-				return;
-			}
-
-			if (notAllowedByFilter(scanResult)) {
-				return;
-			}
-
-			callBackHandler.post(() -> {
-				scanResult.stamp();
-				bluetoothCentralManagerCallback.onDiscoveredPeripheral(peripheral, scanResult);
-			});
-		}else {
-			logger.debug("Ignore scan results normalScanActive={}, isScanning={}, isStoppingScan={})",normalScanActive,isScanning,isStoppingScan);
+		// Implement SCANOPTION_NO_NULL_NAMES
+		if (scanOptions.contains(SCANOPTION_NO_NULL_NAMES) && scanResult.getName() == null) {
+			return;
 		}
+
+		if (notAllowedByFilter(scanResult)) {
+			return;
+		}
+
+		callBackHandler.post(() -> {
+			scanResult.stamp();
+			bluetoothCentralManagerCallback.onDiscoveredPeripheral(peripheral, scanResult);
+		});
 	}
 
 	void handleInterfaceAddedForDevice(@NotNull final String path, @NotNull final Map<String, Variant<?>> value) {
