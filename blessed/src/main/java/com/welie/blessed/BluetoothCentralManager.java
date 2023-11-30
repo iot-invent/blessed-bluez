@@ -142,8 +142,8 @@ public class BluetoothCentralManager {
 	private short discoveryRssiThreshold = -80;
 	private String discoveryPattern="";
 	// Scan in intervals. Make sure it is less than 10seconds to avoid issues with Bluez internal scanning
-	private static final long SCAN_WINDOW = 9500;
-	private static final long SCAN_INTERVAL = 10000;
+	private static final long SCAN_WINDOW = 5000;
+	private static final long SCAN_INTERVAL = 5000;
 	protected static final long CONNECT_DELAY = TimeUnit.MILLISECONDS.toMillis(500);
 
 	// Null check errors
