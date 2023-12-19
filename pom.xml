@@ -3,7 +3,7 @@
 
     <groupId>io.rtlscloud.blessed-bluez</groupId>
     <artifactId>blessed-root</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>blessed</module>
