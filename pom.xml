@@ -1,26 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.rtlscloud.blessed-bluez</groupId>
-    <artifactId>blessed-root</artifactId>
-    <version>${revision}${changelist}</version>
-    <packaging>pom</packaging>
-    <modules>
-        <module>blessed</module>
-    </modules>
-    <properties>
+	<groupId>io.rtlscloud.blessed-bluez</groupId>
+	<artifactId>blessed-root</artifactId>
+	<version>${revision}${changelist}</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>blessed</module>
+	</modules>
+	<properties>
 		<revision>1.0</revision>
 		<changelist>-SNAPSHOT</changelist>
 		<project.scm.id>github</project.scm.id>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
 	<organization>
 		<name>IoT Invent GmbH</name>
 	</organization>
-		<licenses>
+	<licenses>
 		<license>
 			<name>MIT License</name>
 		</license>
@@ -29,10 +32,99 @@
 	<scm>
 		<connection>scm:git:https://github.com/iot-invent/blessed-bluez.git</connection>
 		<url>https://github.com/iot-invent/blessed-bluez</url>
-		<developerConnection>scm:git:https://github.com/iot-invent/blessed-bluez.git</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+		<developerConnection>
+			scm:git:https://github.com/iot-invent/blessed-bluez.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+				<configuration>
+					<archive>
+						<index>true</index>
+						<manifest>
+							<addClasspath>false</addClasspath>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.3.0</version>
+				<inherited>true</inherited>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive>
+					<includePom>false</includePom>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.3.0</version>
+				<configuration>
+					<rules>
+						<reactorModuleConvergence>
+							<message>The reactor is not valid</message>
+						</reactorModuleConvergence>
+						<requireReleaseDeps>
+							<message>No Snapshots Allowed!</message>
+						</requireReleaseDeps>
+						<requireReleaseVersion>
+							<message>No Snapshots Allowed!</message>
+						</requireReleaseVersion>
+					</rules>
+					<fail>true</fail>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.4.1</version>
+				<inherited>true</inherited>
+				<configuration>
+					<doclint>none</doclint>
+					<additionalparam>-Xdoclint:none</additionalparam>
+					<failOnError>false</failOnError>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.10.0</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.wagon</groupId>
+						<artifactId>wagon-webdav-jackrabbit</artifactId>
+						<version>3.5.1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 
+		</plugins>
+	</build>
 	<distributionManagement>
 		<repository>
 			<id>nexus</id>
